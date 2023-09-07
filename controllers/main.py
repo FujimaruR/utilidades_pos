@@ -20,20 +20,26 @@ class BinaryFacturas(http.Controller):
         invoices = Model.browse(invoice_ids)
         timestamp = int(time.mktime(datetime.now().timetuple()))   
         csvfile = open('%s%s.csv' % ('/tmp/invoices_', timestamp), 'w')
-        fieldnames = ['Producto', 'Lote', 'Cantidad', 'Unidad de medida', 'Precio unitario', 'Descuento', 'Impuestos', 'Subtotal sin impuestos', 'Subtotal']
+        fieldnames = ['Producto', 'Lote', 'Fecha', 'Cantidad', 'PrecioVenta', 'Costo', 'MontoUtilidad', 'Categoria']
         writer = csv.DictWriter(csvfile, quoting=csv.QUOTE_NONE, fieldnames=fieldnames)
         writer.writeheader()
 
         for inv in invoices:
+            precio_venta_con_impuestos = inv.price_unit * (1 + (inv.tax_ids.amount / 100))
+            costo = 0.0
+            utilidadm = 0.0
+            sale_price = inv.price_unit * inv.qty
+            discount = (sale_price * inv.discount) / 100
+            costo = inv.product_id.standard_price * inv.qty
+            utilidadm = (sale_price - discount) - costo
             writer.writerow({'Producto': inv.product_id.name, 
-                            'Lote': inv.id, 
-                            'Cantidad': inv.qty, 
-                            'Unidad de medida': inv.product_uom_id.name, #.encode('ascii', 'ignore') or '', 
-                            'Precio unitario': inv.price_unit,
-                            'Descuento': inv.discount, 
-                            'Impuestos': [(impuesto.name, impuesto.amount) for impuesto in inv.tax_ids],
-                            'SubtotalnImpuestos': inv.price_subtotal_incl,
-                            'Subtotal': inv.price_subtotal,
+                            'Numero de recibo': inv.order_id.pos_reference, 
+                            'Fecha': inv.order_id.date_order, 
+                            'Cantidad': inv.qty, #.encode('ascii', 'ignore') or '', 
+                            'Precio de venta': precio_venta_con_impuestos,
+                            'Costo': costo, 
+                            'Monto de utilidad': utilidadm,
+                            'Categoria': inv.product_id.categ_id.name,
                             })
 
 

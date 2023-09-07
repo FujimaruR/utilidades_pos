@@ -34,7 +34,7 @@
 
     <menuitem
         id="menu_cantu_invoice_utilidad"
-        name="Reporte de Utilidad en Pos"
+        name="Utilidad"
         parent="account.menu_finance_reports"
         action="action_cantu_invoice_utilidadpos_menu"
         sequence="1"
