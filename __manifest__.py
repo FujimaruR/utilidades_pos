@@ -13,6 +13,7 @@
         'security/ir.model.access.csv',
         'wizard/invoice_utilidadpos_wizard.xml',
         'views/invoice_utilidadpos_id.xml',
+        'views/pos_view.xml',
     ],
     'application': False,
     'installable': True,

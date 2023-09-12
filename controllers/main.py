@@ -37,8 +37,8 @@ class BinaryFacturas(http.Controller):
                             'Fecha': inv.order_id.date_order, 
                             'Cantidad': inv.qty, #.encode('ascii', 'ignore') or '', 
                             'Precio de venta': precio_venta_con_impuestos,
-                            'Costo': costo, 
-                            'Monto de utilidad': utilidadm,
+                            'Costo': inv.costo, 
+                            'Monto de utilidad': inv.margen,
                             'Categoria': inv.product_id.categ_id.name,
                             })
 

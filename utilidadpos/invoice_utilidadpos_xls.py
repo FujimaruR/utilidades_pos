@@ -33,8 +33,8 @@ class InvoiceUtilidadXls(models.AbstractModel):
                 'Fecha': line.order_id.date_order,
                 'Cantidad': line.qty,
                 'PrecioVenta': precio_venta_con_impuestos,
-                'Costo': costo,
-                'MontoUtilidad': utilidadm,
+                'Costo': line.costo,
+                'MontoUtilidad': line.margen,
                 'Categoria': line.product_id.categ_id.name,
             }
             lines.append(vals)
@@ -47,6 +47,7 @@ class InvoiceUtilidadXls(models.AbstractModel):
             worksheet = workbook.add_worksheet('Reporte de utilidad')
             bold = workbook.add_format({'bold': True, 'align': 'center'})
             text = workbook.add_format({'font_size': 12, 'align': 'center'})
+            money_format = workbook.add_format({'num_format': '$#,##0.00', 'align': 'center'})
 
             worksheet.merge_range('A1:B1', 'Reporte de utilidad por producto', bold)
             worksheet.set_row(0, 30)  
@@ -75,12 +76,11 @@ class InvoiceUtilidadXls(models.AbstractModel):
             for res in lines:
                 worksheet.write(row, col, res['Producto'], text)
                 worksheet.write(row, col + 1, res['Lote'], text)
-                #worksheet.write(row, col + 2, res['Fecha'], text)
                 fecha = res['Fecha'].strftime('%d/%m/%Y')
                 worksheet.write(row, col + 2, fecha, text)
-                worksheet.write(row, col + 3, res['Cantidad'], text)
-                worksheet.write(row, col + 4, str(self.env.user.company_id.currency_id.symbol) + str(res['PrecioVenta']), text)
-                worksheet.write(row, col + 5, str(self.env.user.company_id.currency_id.symbol) + str(res['Costo']), text)
-                worksheet.write(row, col + 6, str(self.env.user.company_id.currency_id.symbol) + str(res['MontoUtilidad']), text)
+                worksheet.write(row, col + 3, float(res['Cantidad']), text)
+                worksheet.write(row, col + 4, float(res['PrecioVenta']), money_format)
+                worksheet.write(row, col + 5, float(res['Costo']), money_format)
+                worksheet.write(row, col + 6, float(res['MontoUtilidad']), money_format)
                 worksheet.write(row, col + 7, res['Categoria'], text)
                 row = row + 1

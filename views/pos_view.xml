@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_order_tree_lot" model="ir.ui.view">
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lines']/tree/field[@name='price_subtotal_incl']" position="before">
+                <field name="costo"/>
+                <field name="margen"/>
+            </xpath>
+            <xpath expr="//field[@name='lines']/form/group/field[@name='price_subtotal_incl']" position="before">
+                <field name="costo"/>
+                <field name="margen"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
