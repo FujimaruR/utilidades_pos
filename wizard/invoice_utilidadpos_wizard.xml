@@ -24,7 +24,7 @@
     </record>
 
     <record id="action_cantu_invoice_utilidadpos_menu" model="ir.actions.act_window">
-        <field name="name">Utilidad en Pos</field>
+        <field name="name">Reporte utilidad</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">xls.invoice.utilidadpos</field>
         <field name="view_mode">form</field>
